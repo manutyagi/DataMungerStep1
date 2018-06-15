@@ -34,9 +34,10 @@ public class DataMunger {
 	 */
 
 	public String[] getSplitStrings(String queryString) {
-
-		return null;
+		String[] spaceSplit=queryString.toLowerCase().split(" ");		
+		return spaceSplit;
 	}
+	
 
 	/*
 	 * Extract the name of the file from the query. File name can be found after a
@@ -47,8 +48,13 @@ public class DataMunger {
 	 */
 
 	public String getFileName(String queryString) {
-
-		return null;
+		String[] subStr=queryString.split("from");		
+		String str=subStr[1].trim();
+		String[] strFinal =str.split(" ");				 
+		String fileName =strFinal[0].trim();
+		System.out.println(fileName);
+		return fileName;
+		
 	}
 
 	/*
@@ -62,10 +68,18 @@ public class DataMunger {
 	 */
 	
 	public String getBaseQuery(String queryString) {
-
-		return null;
+		String[] str ;
+		String baseQuery="";
+		if(queryString.contains("where")) {
+			str = queryString.toLowerCase().split("where");
+			baseQuery=str[0].trim();
+		}else {
+			baseQuery=queryString;
+		}
+		return baseQuery;
+			
 	}
-
+	
 	/*
 	 * This method will extract the fields to be selected from the query string. The
 	 * query string can have multiple fields separated by comma. The extracted
@@ -79,10 +93,19 @@ public class DataMunger {
 	 */
 	
 	public String[] getFields(String queryString) {
-
-		return null;
+		String[] str = queryString.toLowerCase().split("select");
+		String str1 = str[1].trim();
+		String[] str2 = str1.toLowerCase().split("from");
+		String str3 = str2[0].trim();
+		String[] str4 = str3.toLowerCase().split(",");
+		int len =str4.length;
+		for(int i=0;i<len;i++) {
+			String str5 = str4[i].trim();
+			System.out.println(str5);
+		}
+		return str4;
 	}
-
+	
 	/*
 	 * This method is used to extract the conditions part from the query string. The
 	 * conditions part contains starting from where keyword till the next keyword,
@@ -93,9 +116,9 @@ public class DataMunger {
 	 * might not contain where clause at all.
 	 */
 	
-	public String getConditionsPartQuery(String queryString) {
-
-		return null;
+	public String getConditionsPartQuery(String queryString) {		
+		String str= queryString.toLowerCase().trim().split("where|group by|order by")[1].trim();
+		return str;
 	}
 
 	/*
@@ -114,10 +137,14 @@ public class DataMunger {
 	 */
 
 	public String[] getConditions(String queryString) {
-
-		return null;
+		String str = queryString.toLowerCase();
+		String[] whereConditions=null;
+		if(str.contains("where")) {
+			String whereQuery=str.split("where|group by|order by")[1].trim();
+			whereConditions = whereQuery.split(" and | or ");
+		}
+		return whereConditions;
 	}
-
 	/*
 	 * This method will extract logical operators(AND/OR) from the query string. The
 	 * extracted logical operators will be stored in a String array which will be
